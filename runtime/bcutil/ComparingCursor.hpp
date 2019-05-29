@@ -57,6 +57,7 @@ public:
 	U_32 peekU32(DataType dataType);
 	void skip(UDATA byteCount, DataType dataType = Cursor::GENERIC);
 	bool isEqual() const { return _isEqual; }
+	bool isLambda() const { return _isLambda; }
 
 private:
 	J9JavaVM *_javaVM;
@@ -71,6 +72,7 @@ private:
 	ComparingCursorHelper _lineNumberHelper;
 	ComparingCursorHelper _varInfoHelper;
 	bool _isEqual;
+	bool _isLambda;
 	void markUnEqual() { _isEqual = false; }
 	bool isRangeValidForPtr(U_8 *ptr, UDATA length);
 	UDATA getMaximumValidLengthForPtrInSegment(U_8 *ptr);

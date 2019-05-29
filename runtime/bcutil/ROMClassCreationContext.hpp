@@ -267,26 +267,27 @@ public:
 	}
 
 	bool isROMClassShareable() const {
-		/*
-		 * Any of the following conditions prevent the sharing of a ROMClass:
-		 *  - classloader is not shared classes enabled
-		 *  - cache is full
-		 *  - Unsafe classes are not shared
-		 *  - shared cache is BCI enabled and class is modified by BCI agent
-		 *  - shared cache is BCI enabled and ROMClass being store is intermediate ROMClass
-		 *  - the class is loaded from a patch path
-		 */
-		if (isSharedClassesEnabled()
-			&& isClassLoaderSharedClassesEnabled()
-			&& !isClassUnsafe()
-			&& !(isSharedClassesBCIEnabled()
-			&& (classFileBytesReplaced() || isCreatingIntermediateROMClass()))
-			&& (LOAD_LOCATION_PATCH_PATH != loadLocation())
-		) {
-			return true;
-		} else {
-			return false;
-		}
+			/*
+			 * Any of the following conditions prevent the sharing of a ROMClass:
+			 *  - classloader is not shared classes enabled
+			 *  - cache is full
+			 *  - Unsafe classes except anonymous classes are not shared 
+			 *  - shared cache is BCI enabled and class is modified by BCI agent
+			 *  - shared cache is BCI enabled and ROMClass being store is intermediate ROMClass
+			 *  - the class is loaded from a patch path
+			 */
+
+			if (isSharedClassesEnabled()
+				&& isClassLoaderSharedClassesEnabled()
+				&& (!isClassUnsafe() || isClassAnon())
+				&& !(isSharedClassesBCIEnabled()
+				&& (classFileBytesReplaced() || isCreatingIntermediateROMClass()))
+				&& (LOAD_LOCATION_PATCH_PATH != loadLocation())
+			) {
+				return true;
+			} else {
+				return false;
+			}
 	}
 
 	/*

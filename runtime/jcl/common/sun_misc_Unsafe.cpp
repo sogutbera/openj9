@@ -100,6 +100,11 @@ Java_sun_misc_Unsafe_defineAnonymousClass(JNIEnv *env, jobject receiver, jclass 
 
 	jsize length = env->GetArrayLength(bytecodes);
 
+	if(NULL != vm->sharedClassConfig){
+		/* if shared classes are enabled for an anonymous class, the class loader shared classes should be enabled to store the class in the cache */
+		vm->anonClassLoader->flags |= J9CLASSLOADER_SHARED_CLASSES_ENABLED;
+	}
+
 	/* acquires access internally */
 	jclass anonClass = defineClassCommon(env, hostClassLoaderLocalRef, NULL,bytecodes, 0, length, protectionDomainLocalRef, J9_FINDCLASS_FLAG_UNSAFE | J9_FINDCLASS_FLAG_ANON, hostClazz);
 	if (env->ExceptionCheck()) {

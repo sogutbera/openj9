@@ -193,7 +193,38 @@ SH_ROMClassManagerImpl::storeNew(J9VMThread* currentThread, const ShcItem* itemI
 		orphanReunited = reuniteOrphan(currentThread, (const char*)J9UTF8_DATA(utf8Name), J9UTF8_LENGTH(utf8Name), itemInCache, romClass);
 	}
 	if (!orphanReunited) {
-		result = hllTableUpdate(currentThread, _linkedListImplPool, utf8Name, itemInCache, cachelet);
+
+		U_16 stringLength = J9UTF8_LENGTH(utf8Name);
+		U_16 newStringLength = 0;
+		const char* stringBytes = (const char*)J9UTF8_DATA(utf8Name);
+
+		for(U_32 i = stringLength - 2; i >= 8; i--){
+			if('$' == *(stringBytes + i - 8)
+				&& '$' == *(stringBytes + i - 7)
+				&& 'L' == *(stringBytes + i - 6)
+				&& 'a' == *(stringBytes + i - 5)
+				&& 'm' == *(stringBytes + i - 4)
+				&& 'b' == *(stringBytes + i - 3)
+				&& 'd' == *(stringBytes + i - 2)
+				&& 'a' == *(stringBytes + i - 1)
+				&& '$' == *(stringBytes + i)
+		        ) {
+					newStringLength = i + 1;
+		            break;
+		        }
+		}
+
+		// ^^^^
+		if(newStringLength){
+			J9UTF8* utf8LambdaName = (J9UTF8*)j9mem_allocate_memory(sizeof(U_16) + newStringLength + 1, J9MEM_CATEGORY_CLASSES);
+			J9UTF8_SET_LENGTH(utf8LambdaName, newStringLength);
+			memcpy(((U_8*) J9UTF8_DATA(utf8LambdaName)), stringBytes, newStringLength);
+			*(((U_8*) J9UTF8_DATA(utf8LambdaName)) + newStringLength) = '\0';
+			result = hllTableUpdate(currentThread, _linkedListImplPool, utf8LambdaName, itemInCache, cachelet);
+		}
+		else {
+			result = hllTableUpdate(currentThread, _linkedListImplPool, utf8Name, itemInCache, cachelet);
+		}
 		if (!result) {
 			Trc_SHR_RMI_storeNew_ExitFalse(currentThread);
 			return false;

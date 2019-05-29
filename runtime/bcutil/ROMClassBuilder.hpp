@@ -122,7 +122,7 @@ private:
 	U_8 *_bufferManagerBuffer;
 	StringInternTable _stringInternTable;
 
-	BuildResult handleAnonClassName(J9CfrClassFile *classfile);
+	BuildResult handleAnonClassName(J9CfrClassFile *classfile, U_8 *savedNumber, U_32 *savedNumberLength);
 	U_32 computeExtraModifiers(ClassFileOracle *classFileOracle, ROMClassCreationContext *context);
 	U_32 computeOptionalFlags(ClassFileOracle *classFileOracle, ROMClassCreationContext *context);
 	BuildResult prepareAndLaydown( BufferManager *bufferManager, ClassFileParser *classFileParser, ROMClassCreationContext *context );
@@ -150,7 +150,7 @@ private:
 
 	bool compareROMClassForEquality(U_8 *romClass, bool romClassIsShared,
 			ROMClassWriter *romClassWriter, SRPOffsetTable *srpOffsetTable, SRPKeyProducer *srpKeyProducer, ClassFileOracle *classFileOracle,
-			U_32 modifiers, U_32 extraModifiers, U_32 optionalFlags, ROMClassCreationContext * context);
+			U_32 modifiers, U_32 extraModifiers, U_32 optionalFlags, ROMClassCreationContext * context, U_32 romSize);
 	SharedCacheRangeInfo getSharedCacheSRPRangeInfo(void *address);
 	void getSizeInfo(ROMClassCreationContext *context, ROMClassWriter *romClassWriter, SRPOffsetTable *srpOffsetTable, bool *countDebugDataOutOfLine, SizeInformation *sizeInformation);
 };

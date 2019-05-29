@@ -352,7 +352,7 @@ ROMClassWriter::writeROMClass(Cursor *cursor,
 		CheckSize _(cursor, sizeof(J9ROMClass));
 		cursor->writeU32(romSize, Cursor::ROM_SIZE);
 		cursor->writeU32(_classFileOracle->getSingleScalarStaticCount(), Cursor::GENERIC);
-		cursor->writeSRP(_srpKeyProducer->mapCfrConstantPoolIndexToKey(_classFileOracle->getClassNameIndex()), Cursor::SRP_TO_UTF8);
+		cursor->writeSRP(_srpKeyProducer->mapCfrConstantPoolIndexToKey(_classFileOracle->getClassNameIndex()), Cursor::SRP_TO_UTF8_CLASS_NAME);
 		cursor->writeSRP(_srpKeyProducer->mapCfrConstantPoolIndexToKey(_classFileOracle->getSuperClassNameIndex()), Cursor::SRP_TO_UTF8);
 		cursor->writeU32(modifiers, Cursor::GENERIC);
 		cursor->writeU32(extraModifiers, Cursor::GENERIC);
@@ -398,7 +398,7 @@ ROMClassWriter::writeROMClass(Cursor *cursor,
 		cursor->writeU32(_classFileOracle->getBootstrapMethodCount(), Cursor::GENERIC);
 		cursor->writeU32(_constantPoolMap->getCallSiteCount(), Cursor::GENERIC);
 		cursor->writeSRP(_callSiteDataSRPKey, Cursor::SRP_TO_GENERIC);
-		cursor->writeU32(_classFileOracle->getClassFileSize(), Cursor::GENERIC);
+		cursor->writeU32(_classFileOracle->getClassFileSize(), Cursor::CLASS_FILE_SIZE);
 		cursor->writeU32((U_32)_classFileOracle->getConstantPoolCount(), Cursor::GENERIC);
 		cursor->writeU16(_constantPoolMap->getStaticSplitEntryCount(), Cursor::GENERIC);
 		cursor->writeU16(_constantPoolMap->getSpecialSplitEntryCount(), Cursor::GENERIC);

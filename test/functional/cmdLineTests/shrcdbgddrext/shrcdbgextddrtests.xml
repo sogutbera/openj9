@@ -138,7 +138,8 @@
                 <input>!shrc stats</input>
                 <input>quit</input>
         </command>
-  <output regex="no" type="success" >4 orphans</output>
+        
+  <output regex="yes" javaUtilPattern="yes" type="success" >([4-9]|[1-9][\d]+) orphans</output>
   <output regex="no" type="failure">no shared cache</output>
   <output regex="no" type="failure">unable to read</output>
   <output regex="no" type="failure">could not read</output>
