@@ -1049,6 +1049,63 @@
 		<output type="failure" caseSensitive="no" regex="no">corrupt</output>
 		<output type="failure" caseSensitive="yes" regex="no">Processing dump event</output>
 	</test>
+	
+	<test id="Test 57: Make sure that lambda expressions work and store the classes in the shared class cache" timeout="600" runPath=".">
+    	<command>$JAVA_EXE$ $currentMode$ $CP_HANOI$ $PROGRAM_LAMBDA$ 0</command>
+   		<output type="success" caseSensitive="yes" regex="no">Lambda test done!</output>
+    
+   		<output type="failure" caseSensitive="no" regex="no">Unhandled Exception</output>
+   		<output type="failure" caseSensitive="no" regex="no">corrupt</output>
+    	<output type="failure" caseSensitive="yes" regex="no">Processing dump event</output>
+	</test>
+
+	<test id="Test 58: Make sure that lambda classes are stored in the cache as orphans" timeout="600" runPath=".">
+	    <command>$JAVA_EXE$ $currentMode$,printstats=orphan</command>
+	    <output type="success" caseSensitive="yes" regex="yes" javaUtilPattern="yes">ORPHAN: org/openj9/test/lambdatests/Test2$$Lambda$([1-2])/0000000000000000 at</output>
+	    <output type="required" caseSensitive="yes" regex="yes" javaUtilPattern="yes">ORPHAN: org/openj9/test/lambdatests/Test1$$Lambda$([3-7])/0000000000000000 at</output>
+	    
+	    <output type="failure" caseSensitive="no" regex="no">Unhandled Exception</output>
+	    <output type="failure" caseSensitive="yes" regex="no">Exception:</output>
+	    <output type="failure" caseSensitive="no" regex="no">corrupt</output>
+	    <output type="failure" caseSensitive="yes" regex="no">Processing dump event</output>
+	</test>
+	
+	<test id="Test 59: Make sure that when the program runs again lambda classes are used from the cache and not stored again " timeout="600" runPath=".">
+	    <command>$JAVA_EXE$ $currentMode$ -Xtrace:print={j9shr.2259} $CP_HANOI$ $PROGRAM_LAMBDA$ 0</command>
+	    <output type="success" caseSensitive="yes" regex="no">Test done!</output>
+	    
+	    <output type="failure" caseSensitive="no" regex="yes" javaUtilPattern="yes">j9shr.2259     > API j9shr_classStoreTransaction_createSharedClass : enter (classname=org/openj9/test/lambdatests/Test2$$Lambda$([\d]*)/0000000000000000</output>
+	    <output type="failure" caseSensitive="no" regex="yes" javaUtilPattern="yes">j9shr.2259     > API j9shr_classStoreTransaction_createSharedClass : enter (classname=org/openj9/test/lambdatests/Test1$$Lambda$([\d]*)/0000000000000000</output>
+	    <output type="failure" caseSensitive="no" regex="no">Unhandled Exception</output>
+	    <output type="failure" caseSensitive="yes" regex="no">Exception:</output>
+	    <output type="failure" caseSensitive="no" regex="no">corrupt</output>
+	    <output type="failure" caseSensitive="yes" regex="no">Processing dump event</output>
+	</test>
+	
+	<test id="Test 60: Make sure that when the program runs again with a different order of lambda classes, the classes are used from the cache and not stored again " timeout="600" runPath=".">
+	    <command>$JAVA_EXE$ $currentMode$ -Xtrace:print={j9shr.2259} $CP_HANOI$ $PROGRAM_LAMBDA$ 1</command>
+	    <output type="success" caseSensitive="yes" regex="no">Test done!</output>
+	  	<output type="required" caseSensitive="yes" regex="yes" javaUtilPattern="yes">j9shr.2259     > API j9shr_classStoreTransaction_createSharedClass : enter (classname=org/openj9/test/lambdatests/Test1$$Lambda$([3-7])/0000000000000000</output>
+	    
+	    <output type="failure" caseSensitive="no" regex="yes" javaUtilPattern="yes">j9shr.2259     > API j9shr_classStoreTransaction_createSharedClass : enter (classname=org/openj9/test/lambdatests/Test2$$Lambda$([\d]*)/0000000000000000</output>
+	    <output type="failure" caseSensitive="no" regex="yes" javaUtilPattern="yes">j9shr.2259     > API j9shr_classStoreTransaction_createSharedClass : enter (classname=org/openj9/test/lambdatests/Test1$$Lambda$([8-9]|[1][0-2])/0000000000000000</output>
+	    <output type="failure" caseSensitive="no" regex="no">Unhandled Exception</output>
+	    <output type="failure" caseSensitive="yes" regex="no">Exception:</output>
+	    <output type="failure" caseSensitive="no" regex="no">corrupt</output>
+	    <output type="failure" caseSensitive="yes" regex="no">Processing dump event</output>
+	</test>
+	
+	<test id="Test 61: Make sure that when the program runs again, the classes are used from the cache and not stored again " timeout="600" runPath=".">
+	    <command>$JAVA_EXE$ $currentMode$ -Xtrace:print={j9shr.2259} $CP_HANOI$ $PROGRAM_LAMBDA$ 1</command>
+	    <output type="success" caseSensitive="yes" regex="no">Test done!</output>
+	    
+	    <output type="failure" caseSensitive="no" regex="yes" javaUtilPattern="yes">j9shr.2259     > API j9shr_classStoreTransaction_createSharedClass : enter (classname=org/openj9/test/lambdatests/Test2$$Lambda$([\d]*)/0000000000000000</output>
+	    <output type="failure" caseSensitive="no" regex="yes" javaUtilPattern="yes">j9shr.2259     > API j9shr_classStoreTransaction_createSharedClass : enter (classname=org/openj9/test/lambdatests/Test1$$Lambda$([\d]*)/0000000000000000</output>
+	    <output type="failure" caseSensitive="no" regex="no">Unhandled Exception</output>
+	    <output type="failure" caseSensitive="yes" regex="no">Exception:</output>
+	    <output type="failure" caseSensitive="no" regex="no">corrupt</output>
+	    <output type="failure" caseSensitive="yes" regex="no">Processing dump event</output>
+	</test>
 
 	<test id="At end destroy cache for cleanup" timeout="600" runPath=".">
 		<command>$JAVA_EXE$ $currentMode$,destroy</command>
