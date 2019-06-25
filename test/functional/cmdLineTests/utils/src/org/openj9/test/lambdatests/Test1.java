@@ -21,6 +21,7 @@
  *******************************************************************************/
 
 package org.openj9.test.lambdatests;
+
 import java.util.Comparator;
 
 public class Test1 {
@@ -36,55 +37,55 @@ public class Test1 {
             return str1.compareTo(o1)+o1.compareTo(o2)+o2.compareTo(o1)+15+x;
         };
         int lambdaComparison = stringComparatorLambda.compare("world", "hello");
-        System.out.print(lambdaComparison);
+        System.out.println(lambdaComparison);
 
         Comparator<String> stringComparatorLambda2 = (String o1, String o2) -> {
             return str1.compareTo(o1)+o1.compareTo(o2)+o2.compareTo(o1)+42+x;
         };
         int lambdaComparison2 = stringComparatorLambda2.compare("qqqsdasfds", "dsfkopvwqp");
-        System.out.print(lambdaComparison2);
+        System.out.println(lambdaComparison2);
 
         Comparator<String> stringComparatorLambda3 = (String o1, String o2) -> {
             return str1.compareTo(o1)+o1.compareTo(o2)+o2.compareTo(o1)+15+x;
         };
         int lambdaComparison3 = stringComparatorLambda3.compare("ojusoqm", "qiwpkd");
-        System.out.print(lambdaComparison3);
+        System.out.println(lambdaComparison3);
 
         Comparator<String> stringComparatorLambda4 = (String o1, String o2) -> {
             return str1.compareTo(o1)+o1.compareTo(o2)+o2.compareTo(o1)+15+x;
         };
         int lambdaComparison4 = stringComparatorLambda4.compare("skxonqwi", "mcxkqwj");
-        System.out.print(lambdaComparison4);
+        System.out.println(lambdaComparison4);
 
         Comparator<String> stringComparatorLambda5 = (String o1, String o2) -> {
             return str1.compareTo(o1)+o1.compareTo(o2)+o2.compareTo(o1)+15+x;
         };
         int lambdaComparison5 = stringComparatorLambda5.compare("qwjnd", "sdmka");
-        System.out.print(lambdaComparison5);
+        System.out.println(lambdaComparison5);
 
         Comparator<String> stringComparatorLambda6 = (String o1, String o2) -> {
             return str1.compareTo(o1)+o1.compareTo(o2)+o2.compareTo(o1)+15+x;
         };
         int lambdaComparison6 = stringComparatorLambda6.compare("fdosofofsdkfe", "pdsfklaspl");
-        System.out.print(lambdaComparison6);
+        System.out.println(lambdaComparison6);
 
         Comparator<String> stringComparatorLambda7 = (String o1, String o2) -> {
             return str1.compareTo(o1)+o1.compareTo(o2)+o2.compareTo(o1)+15+x;
         };
         int lambdaComparison7 = stringComparatorLambda7.compare("ksadmnfkas", "sdfjfs");
-        System.out.print(lambdaComparison7);
+        System.out.println(lambdaComparison7);
 
         Comparator<String> stringComparatorLambda8 = (String o1, String o2) -> {
             return str1.compareTo(o1)+o1.compareTo(o2)+o2.compareTo(o1)+15+x;
         };
         int lambdaComparison8 = stringComparatorLambda8.compare("sdfjfsc", "zcxmlapq");
-        System.out.print(lambdaComparison8);
+        System.out.println(lambdaComparison8);
 
         Comparator<String> stringComparatorLambda9 = (String o1, String o2) -> {
             return str1.compareTo(o1)+o1.compareTo(o2)+o2.compareTo(o1)+15+x;
         };
         int lambdaComparison9 = stringComparatorLambda9.compare("sdkfaq[]", "asjdfnvniww");
-        System.out.print(lambdaComparison9);
+        System.out.println(lambdaComparison9);
 
         int y = 12345;
         Comparator<String> stringComparatorLambda10 = (String o1, String o2) -> {
@@ -92,6 +93,7 @@ public class Test1 {
         };
         int lambdaComparison10 = stringComparatorLambda10.compare("###", "!!!");
         System.out.println(lambdaComparison10);
+        
+        System.out.println("Lambda test done!");
     }
 }
-
