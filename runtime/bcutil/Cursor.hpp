@@ -115,6 +115,7 @@ public:
 	{
 	}
 
+	virtual U_16 getClassNameIndexFromClassFileOracle() { return 0; }
 	virtual UDATA getCount() { return _count; }
 
 	/* Note: WritingCursor's versions of the methods below do not call these ones for
@@ -124,7 +125,6 @@ public:
 	virtual void writeU8(U_8 u8Value, DataType dataType) { _count += sizeof(U_8); }
 	virtual void writeU16(U_16 u16Value, DataType dataType) { _count += sizeof(U_16); }
 	virtual void writeU32(U_32 u32Value, DataType dataType) { _count += sizeof(U_32); }
-	virtual bool isEqual() const { return false; }
 	virtual void writeU64(U_32 u32ValueHigh, U_32 u32ValueLow, DataType dataType) { _count += sizeof(U_64); }
 	virtual void writeUTF8(U_8* utf8Data, U_16 utf8Length, DataType dataType)
 	{

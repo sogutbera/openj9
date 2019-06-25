@@ -771,8 +771,38 @@ j9shr_classStoreTransaction_nextSharedClassForCompare(void * tobj)
 		return NULL;
 	}
 
-	obj->findNextRomClass = (J9ROMClass *) cachemap->findNextROMClass(currentThread, obj->findNextIterator, obj->firstFound, obj->classnameLength, (const char*)obj->classnameData);
+	bool isLambda = false;
+	const char *stringBytes = (const char*)obj->classnameData;
+	U_16 newStringLength;
 
+	for(U_32 i = obj->classnameLength - 2; i >= 8; i--){
+		if('$' == *(stringBytes + i - 8)
+			&& '$' == *(stringBytes + i - 7)
+			&& 'L' == *(stringBytes + i - 6)
+			&& 'a' == *(stringBytes + i - 5)
+			&& 'm' == *(stringBytes + i - 4)
+			&& 'b' == *(stringBytes + i - 3)
+			&& 'd' == *(stringBytes + i - 2)
+			&& 'a' == *(stringBytes + i - 1)
+			&& '$' == *(stringBytes + i)
+			) {
+				isLambda = true;
+				newStringLength = i + 1;
+				break;
+		}
+	}
+
+	if(isLambda){
+
+		char newString[(const int)(newStringLength + 1)];
+		for(U_32 j = 0; j < newStringLength; j++)
+			newString[j] = *(stringBytes + j);
+		newString[newStringLength] = '\0';
+		obj->findNextRomClass = (J9ROMClass *) cachemap->findNextROMClass(currentThread, obj->findNextIterator, obj->firstFound, newStringLength, newString);
+	}
+	else {
+		obj->findNextRomClass = (J9ROMClass *) cachemap->findNextROMClass(currentThread, obj->findNextIterator, obj->firstFound, obj->classnameLength, (const char*)obj->classnameData);
+	}
 	Trc_SHR_API_j9shr_nextSharedClassForCompare_Exit(currentThread);
 	return (J9ROMClass *)(obj->findNextRomClass);
 }

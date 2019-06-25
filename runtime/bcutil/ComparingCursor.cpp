@@ -110,12 +110,15 @@ ComparingCursor::writeU32(U_32 u32Value, DataType dataType)
 	ComparingCursorHelper * countingcursor = getCountingCursor(dataType);
 	if ( shouldCheckForEquality(dataType, u32Value) ) {
 		U_32 * tmpu32 = (U_32 *)(countingcursor->getBaseAddress() + countingcursor->getCount());
-		if(Cursor::CLASS_FILE_SIZE == dataType && abs(u32Value - *tmpu32) > sizeof(U_32)){
+		if ( !isRangeValid(sizeof(U_32), dataType) || (u32Value != *tmpu32)) {
 			markUnEqual();
 		}
-		else if ( !isRangeValid(sizeof(U_32), dataType) || (u32Value != *tmpu32)) {
+	}
+	else if(dataType == CLASS_FILE_SIZE && isLambda()){
+		/* if the class is a lambda class and the data type is class file size, check if the difference between them is less than sizeof(U_32) */
+		U_32 * tmpu32 = (U_32 *)(countingcursor->getBaseAddress() + countingcursor->getCount());
+		if(sizeof(U_32) < abs((int)(u32Value - *tmpu32)))
 			markUnEqual();
-		}
 	}
 	countingcursor->writeU32(u32Value, dataType);
 }
@@ -267,7 +270,6 @@ ComparingCursor::writeSRP(UDATA srpKey, DataType dataType)
 	countingcursor->writeSRP(srpKey, dataType);
 }
 
-
 void
 ComparingCursor::writeWSRP(UDATA srpKey, DataType dataType)
 {
@@ -415,6 +417,11 @@ ComparingCursor::padToAlignment(UDATA byteAlignment, DataType dataType)
 	countingcursor->padToAlignment(byteAlignment, dataType);
 }
 
+U_16
+ComparingCursor::getClassNameIndexFromClassFileOracle(){
+	return _classFileOracle->getClassNameIndex();
+}
+
 bool
 ComparingCursor::shouldCheckForEquality(DataType dataType, U_32 u32Value)
 {
@@ -423,9 +430,10 @@ ComparingCursor::shouldCheckForEquality(DataType dataType, U_32 u32Value)
 	}
 
 	switch (dataType) {
-	case SRP_TO_UTF8_CLASS_NAME: /* fall through */
+	case CLASS_FILE_SIZE: /* fall through */
+	case SRP_TO_UTF8_CLASS_NAME:
 		if(isLambda()) {
-			/* if the class is a lambda class don't compare the class names */
+			/* if the class is a lambda class don't compare the class names or the class file sizes */
 			return false;
 		}
 	case BYTECODE: /* fall through */
@@ -434,11 +442,9 @@ ComparingCursor::shouldCheckForEquality(DataType dataType, U_32 u32Value)
 	case SRP_TO_GENERIC: /* fall through */
 	case SRP_TO_UTF8: /* fall through */
 	case SRP_TO_NAME_AND_SIGNATURE: /* fall through */
-	case SRP_TO_INTERMEDIATE_CLASS_DATA: /* fall through */
-	case CLASS_FILE_SIZE:
+	case SRP_TO_INTERMEDIATE_CLASS_DATA:
 		/* do nothing -- return true at bottom of function */
 		break;
-
 	case METHOD_DEBUG_SIZE: /* fall through */
 	case ROM_SIZE: /* fall through */
 	case INTERMEDIATE_CLASS_DATA: /* fall through */

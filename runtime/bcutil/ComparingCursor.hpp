@@ -38,7 +38,7 @@ class ComparingCursor : public Cursor
 {
 public:
 	ComparingCursor(J9JavaVM *javaVM, SRPOffsetTable *srpOffsetTable, SRPKeyProducer *srpKeyProducer,
-		ClassFileOracle *classFileOracle, U_8 *romClass, bool romClassIsShared, ROMClassCreationContext * context);
+		ClassFileOracle *classFileOracle, U_8 *romClass, bool romClassIsShared, ROMClassCreationContext * context, bool isLambda);
 	~ComparingCursor();
 
 	UDATA getCount();
@@ -58,6 +58,7 @@ public:
 	void skip(UDATA byteCount, DataType dataType = Cursor::GENERIC);
 	bool isEqual() const { return _isEqual; }
 	bool isLambda() const { return _isLambda; }
+	U_16 getClassNameIndexFromClassFileOracle();
 
 private:
 	J9JavaVM *_javaVM;

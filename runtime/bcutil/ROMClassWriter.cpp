@@ -482,7 +482,13 @@ public:
 
 	void visitClass(U_16 cfrCPIndex)
 	{
-		_cursor->writeSRP(_srpKeyProducer->mapCfrConstantPoolIndexToKey(cfrCPIndex), Cursor::SRP_TO_UTF8);
+		if(cfrCPIndex == _cursor->getClassNameIndexFromClassFileOracle()){
+			/* if the cfrCPIndex is for the class name, the data type should be SRP_TO_UTF8_CLASS_NAME */
+			_cursor->writeSRP(_srpKeyProducer->mapCfrConstantPoolIndexToKey(cfrCPIndex), Cursor::SRP_TO_UTF8_CLASS_NAME);
+		}
+		else {
+			_cursor->writeSRP(_srpKeyProducer->mapCfrConstantPoolIndexToKey(cfrCPIndex), Cursor::SRP_TO_UTF8);
+		}
 		_cursor->writeU32(BCT_J9DescriptionCpTypeClass, Cursor::GENERIC);
 	}
 
