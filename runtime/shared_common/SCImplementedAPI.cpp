@@ -793,13 +793,13 @@ j9shr_classStoreTransaction_nextSharedClassForCompare(void * tobj)
 	}
 
 	if(isLambda){
-
-		const int newStringSize = newStringLength + 1;
-		char newString[newStringSize];
+		PORT_ACCESS_FROM_VMC(currentThread);
+		char *newString = (char *)j9mem_allocate_memory(newStringLength + 1, J9MEM_CATEGORY_CLASSES);
 		for(U_32 j = 0; j < newStringLength; j++)
-			newString[j] = *(stringBytes + j);
-		newString[newStringLength] = '\0';
+			*(newString + j) = *(stringBytes + j);
+		*(newString + newStringLength) = '\0';
 		obj->findNextRomClass = (J9ROMClass *) cachemap->findNextROMClass(currentThread, obj->findNextIterator, obj->firstFound, newStringLength, newString);
+		j9mem_free_memory(newString);
 	}
 	else {
 		obj->findNextRomClass = (J9ROMClass *) cachemap->findNextROMClass(currentThread, obj->findNextIterator, obj->firstFound, obj->classnameLength, (const char*)obj->classnameData);

@@ -192,6 +192,7 @@ SH_ROMClassManagerImpl::storeNew(J9VMThread* currentThread, const ShcItem* itemI
 	if (ITEMTYPE(itemInCache) == TYPE_ROMCLASS) {
 		orphanReunited = reuniteOrphan(currentThread, (const char*)J9UTF8_DATA(utf8Name), J9UTF8_LENGTH(utf8Name), itemInCache, romClass);
 	}
+
 	if (!orphanReunited) {
 
 		bool isLambda = false;
@@ -221,7 +222,7 @@ SH_ROMClassManagerImpl::storeNew(J9VMThread* currentThread, const ShcItem* itemI
 			if(isLambda){
 				/* if it is a lambda class, remove the part after the $ from the hashkey */
 				PORT_ACCESS_FROM_PORT(_portlib);
-				J9UTF8* utf8LambdaName = (J9UTF8*) j9mem_allocate_memory(sizeof(U_16) + newStringLength + 1, J9MEM_CATEGORY_CLASSES);;
+				J9UTF8* utf8LambdaName = (J9UTF8*) j9mem_allocate_memory(sizeof(U_16) + newStringLength + 1, J9MEM_CATEGORY_CLASSES);
 				J9UTF8_SET_LENGTH(utf8LambdaName, newStringLength);
 				memcpy(((U_8*) J9UTF8_DATA(utf8LambdaName)), stringBytes, newStringLength);
 				*(((U_8*) J9UTF8_DATA(utf8LambdaName)) + newStringLength) = '\0';
