@@ -794,7 +794,8 @@ j9shr_classStoreTransaction_nextSharedClassForCompare(void * tobj)
 
 	if(isLambda){
 
-		char newString[(const int)(newStringLength + 1)];
+		const int newStringSize = newStringLength + 1;
+		char newString[newStringSize];
 		for(U_32 j = 0; j < newStringLength; j++)
 			newString[j] = *(stringBytes + j);
 		newString[newStringLength] = '\0';
