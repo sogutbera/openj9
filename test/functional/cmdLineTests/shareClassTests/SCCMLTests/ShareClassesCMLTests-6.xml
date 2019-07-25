@@ -933,7 +933,43 @@
 		<output type="failure" caseSensitive="no" regex="no">corrupt</output>
 		<output type="failure" caseSensitive="yes" regex="no">Processing dump event</output>
 	</test>
-
+	
+	<test id="Test 208 cleanup: destroy cache" timeout="600" runPath=".">
+		<command>$JAVA_EXE$ $currentMode$,destroy</command>
+		<output type="success" caseSensitive="yes" regex="no">has been destroyed</output>
+		<output type="success" caseSensitive="yes" regex="no">is destroyed</output>
+		<output type="success" caseSensitive="yes" regex="no">Cache does not exist</output>
+		<output type="failure" caseSensitive="no"  regex="no">Unhandled Exception</output>
+		<output type="failure" caseSensitive="yes" regex="no">Exception:</output>
+		<output type="failure" caseSensitive="no" regex="no">corrupt</output>
+		<output type="failure" caseSensitive="yes" regex="no">Processing dump event</output>
+	</test>
+	
+	<test id="Test 208-a: Make sure that there are no errors when program Hanoi runs with the option noBootclasspath" timeout="600" runPath=".">
+    	<command>$JAVA_EXE$ $currentMode$,noBootclasspath $CP_HANOI$ $PROGRAM_HANOI$</command>
+    	<!-- We are using noBootclasspath because we don't want any other orphans to be stored in the cache except the ones in program Hanoi -->	
+   		<output type="success" caseSensitive="yes" regex="no">Puzzle solved!</output>
+   		<output type="failure" caseSensitive="no" regex="no">Unhandled Exception</output>
+   		<output type="failure" caseSensitive="no" regex="no">corrupt</output>
+    	<output type="failure" caseSensitive="yes" regex="no">Processing dump event</output>
+	</test>
+	
+	<test id="Test 208-b: Make sure that there are no errors when program Hanoi runs again with the option noBootclasspath" timeout="600" runPath=".">
+    	<command>$JAVA_EXE$ $currentMode$,noBootclasspath $CP_HANOI$ $PROGRAM_HANOI$</command>
+   		<output type="success" caseSensitive="yes" regex="no">Puzzle solved!</output>
+   		<output type="failure" caseSensitive="no" regex="no">Unhandled Exception</output>
+   		<output type="failure" caseSensitive="no" regex="no">corrupt</output>
+    	<output type="failure" caseSensitive="yes" regex="no">Processing dump event</output>
+	</test>
+	
+	<test id="Test 208-c: Make sure that the 3 orphans from program Hanoi are being stored in the cache" timeout="600" runPath=".">
+    	<command>$JAVA_EXE$ $currentMode$,printstats=orphan</command>
+    	<output type="success" caseSensitive="yes" regex="no"># ROMClasses                         = 3</output>
+   		<output type="failure" caseSensitive="no" regex="no">Unhandled Exception</output>
+   		<output type="failure" caseSensitive="no" regex="no">corrupt</output>
+    	<output type="failure" caseSensitive="yes" regex="no">Processing dump event</output>
+	</test>
+	
 	<test id="At end destroy cache for cleanup" timeout="600" runPath=".">
 		<command>$JAVA_EXE$ $currentMode$,destroy</command>
 		<output type="success" caseSensitive="yes" regex="no">Cache does not exist</output>
